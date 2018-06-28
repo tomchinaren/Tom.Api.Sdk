@@ -9,6 +9,8 @@ namespace Tom.Api.Request
 {
     public interface IRequest<T> where T: IResponse
     {
+        string BizContent { get; set; }
+
         /// <summary>
         /// 获取的API名称。
         /// </summary>
@@ -33,13 +35,6 @@ namespace Tom.Api.Request
         /// </summary>
         /// <returns>文本请求参数字典</returns>
         IDictionary<string, string> GetParameters();
-
-
-        /// <summary>
-        /// 设置的同步通知地址。
-        /// </summary>
-        /// <returns>异步通知地址</returns>
-        void SetReturnUrl(string returnUrl);
 
         /// <summary>
         /// 设置请求是否需要加密

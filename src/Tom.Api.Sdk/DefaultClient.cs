@@ -9,7 +9,7 @@ using Tom.Api.Util;
 
 namespace Tom.Api.Request
 {
-    class DefaultClient : IClient
+    public class DefaultClient : IClient
     {
         public const string APP_ID = "app_id";
         public const string FORMAT = "format";
