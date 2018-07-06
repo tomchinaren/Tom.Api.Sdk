@@ -106,9 +106,9 @@ namespace Tom.Api.Request
 
             // 参数签名
             string charset = string.IsNullOrEmpty(this.charset) ? "utf-8" : this.charset;
-            string signResult = Signature.RSASign(sortedDic, privateKeyPem, charset, this.keyFromFile, this.signType);
-            // 添加签名结果参数
-            sortedDic.Add(SIGN, signResult);
+            //string signResult = Signature.RSASign(sortedDic, privateKeyPem, charset, this.keyFromFile, this.signType);
+            //// 添加签名结果参数
+            //sortedDic.Add(SIGN, signResult);
 
             // 参数拼接
             string signedResult = WebUtils.BuildQuery(sortedDic, charset);

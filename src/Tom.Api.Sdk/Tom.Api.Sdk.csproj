@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiException.cs" />
+    <Compile Include="AuthToken.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DefaultClient.cs" />
     <Compile Include="Enum\ReturnCode.cs" />
