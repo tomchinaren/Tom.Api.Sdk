@@ -29,13 +29,14 @@ namespace Tom.Api.Util
         /// <param name="parameters">请求参数</param>
         /// <param name="charset">编码字符集</param>
         /// <returns>HTTP响应</returns>
-        public string DoPost(string url, IDictionary<string, string> parameters, string charset, out string originPost)
+        public string DoPost(string url, IDictionary<string, string> parameters, string charset, out string requestBody)
         {
             HttpWebRequest req = GetWebRequest(url, "POST");
             req.ContentType = "application/x-www-form-urlencoded;charset=" + charset;
 
-            string paramString = BuildQuery(parameters, charset);
-            originPost = paramString;
+            //string paramString = BuildQuery(parameters, charset);
+            string paramString = BuildJsonQuery(parameters, charset);
+            requestBody = paramString;
             byte[] postData = Encoding.GetEncoding(charset).GetBytes(paramString);
             //byte[] postData = Encoding.GetEncoding(charset).GetBytes(BuildQuery(parameters, charset));
             Stream reqStream = req.GetRequestStream();
@@ -223,6 +224,13 @@ namespace Tom.Api.Util
             }
 
             return postData.ToString();
+        }
+
+        public static string BuildJsonQuery(IDictionary<string, string> parameters, string charset)
+        {
+            var value = Newtonsoft.Json.JsonConvert.SerializeObject(parameters);
+            string encodedValue = HttpUtility.UrlEncode(value, Encoding.GetEncoding(charset));
+            return encodedValue;
         }
     }
 

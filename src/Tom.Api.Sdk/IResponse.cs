@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tom.Api.Response
 {
@@ -17,6 +12,7 @@ namespace Tom.Api.Response
         private string body;
         private string requestBody;
         private string sign;
+        public string DebugInfo { get; set; }
 
         /// <summary>
         /// 错误码

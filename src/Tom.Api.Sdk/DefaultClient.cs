@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tom.Api.Parser;
 using Tom.Api.Response;
 using Tom.Api.Util;
@@ -33,7 +30,7 @@ namespace Tom.Api.Request
         private string version;
         private string httpmethod;
         private string format;
-        private string charset;
+        private string charset = "utf-8";
         private string signType = "RSA";
         private string encyptKey;
         private string encyptType = "AES";
@@ -65,6 +62,13 @@ namespace Tom.Api.Request
 
 
         #region Constructors
+        public DefaultClient(string serverUrl, string signType, string encyptKey)
+        {
+            this.serverUrl = serverUrl;
+            this.signType = signType;
+            this.encyptKey = encyptKey;
+            this.webUtils = new WebUtils();
+        }
         public DefaultClient(string serverUrl, string version, string httpmethod, string format, string charset, string signType, string encyptKey)
         {
             this.serverUrl = serverUrl;
@@ -75,7 +79,6 @@ namespace Tom.Api.Request
 
             this.signType = signType;
             this.encyptKey = encyptKey;
-            this.encyptType = "AES";
             this.webUtils = new WebUtils();
         }
         #endregion
@@ -84,18 +87,18 @@ namespace Tom.Api.Request
         #region IClient Members
         public T Execute<T>(IRequest<T> request) where T : IResponse
         {
-            throw new NotImplementedException();
+            return Execute<T>(request, null);
         }
 
         public T Execute<T>(IRequest<T> request, string session) where T : IResponse
         {
-            throw new NotImplementedException();
+            return Execute<T>(request, session, null);
         }
 
         public T Execute<T>(IRequest<T> request, string session, string appAuthToken) where T : IResponse
         {
             // 构造请求参数
-            ParamDictionary requestParams = buildRequestParams(request, null, null);
+            ParamDictionary requestParams = buildRequestParams(request, session, appAuthToken);
 
             // 字典排序
             IDictionary<string, string> sortedParams = new SortedDictionary<string, string>(requestParams);
@@ -115,15 +118,17 @@ namespace Tom.Api.Request
             // 是否需要上传文件
             string body;
             string requestBody = null;
+            string url = "";// this.serverUrl + "?" + CHARSET + "=" + this.charset;
+            url = GetFullUrl(this.serverUrl, request.GetApiName());// + "?" + CHARSET + "=" + this.charset;
             if (request is IUploadRequest<T>)
             {
                 IUploadRequest<T> uRequest = (IUploadRequest<T>)request;
                 IDictionary<string, FileItem> fileParams = SdkUtils.CleanupDictionary(uRequest.GetFileParameters());
-                body = webUtils.DoPost(this.serverUrl + "?" + CHARSET + "=" + this.charset, txtParams, fileParams, this.charset, out requestBody);
+                body = webUtils.DoPost(url, txtParams, fileParams, this.charset, out requestBody);
             }
             else
             {
-                body = webUtils.DoPost(this.serverUrl + "?" + CHARSET + "=" + this.charset, txtParams, this.charset, out requestBody);
+                body = webUtils.DoPost(url, txtParams, this.charset, out requestBody);
             }
 
             T rsp = null;
@@ -149,6 +154,11 @@ namespace Tom.Api.Request
         }
 
         #endregion
+
+        private string GetFullUrl(string serverUrl, string apiName)
+        {
+            return string.Format("{0}{1}", serverUrl, apiName.Replace("tom.chinesechess.", "").Replace(".", "/"));
+        }
 
         public static void CheckResponseSign<T>(IRequest<T> request, string responseBody, bool isError, IParser<T> parser, string publicKey, string charset, string signType, bool keyFromFile) where T : IResponse
         {

@@ -266,26 +266,7 @@ namespace Tom.Api.Util
                     sPublicKeyPEM += "-----END PUBLIC KEY-----\r\n\r\n";
                 }
 
-
-                if ("RSA2".Equals(signType))
-                {
-                    RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
-                    rsa.PersistKeyInCsp = false;
-                    RSACryptoServiceProviderExtension.LoadPublicKeyPEM(rsa, sPublicKeyPEM);
-
-                    bool bVerifyResultOriginal = rsa.VerifyData(Encoding.GetEncoding(charset).GetBytes(signContent), "SHA256", Convert.FromBase64String(sign));
-                    return bVerifyResultOriginal;
-                }
-                else
-                {
-                    RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
-                    rsa.PersistKeyInCsp = false;
-                    RSACryptoServiceProviderExtension.LoadPublicKeyPEM(rsa, sPublicKeyPEM);
-
-                    SHA1CryptoServiceProvider sha1 = new SHA1CryptoServiceProvider();
-                    bool bVerifyResultOriginal = rsa.VerifyData(Encoding.GetEncoding(charset).GetBytes(signContent), sha1, Convert.FromBase64String(sign));
-                    return bVerifyResultOriginal;
-                }
+                return RSACheckContent(signContent, sign, publicKeyPem, charset, signType, keyFromFile);
             }
             catch
             {

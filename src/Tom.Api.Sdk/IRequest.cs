@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Tom.Api.Response;
 
 namespace Tom.Api.Request
@@ -10,6 +6,9 @@ namespace Tom.Api.Request
     public interface IRequest<T> where T: IResponse
     {
         string BizContent { get; set; }
+        bool Debug { get; set; }
+        string Session { get; set; }
+
 
         /// <summary>
         /// 获取的API名称。
