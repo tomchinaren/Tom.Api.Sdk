@@ -226,11 +226,11 @@ namespace Tom.Api.Request
 
             // 获取参数
             string charset = string.IsNullOrEmpty(this.charset) ? "utf-8" : this.charset;
-            string apiVersion = string.IsNullOrEmpty(request.GetApiVersion()) ? this.Version : request.GetApiVersion();
+            string version = string.IsNullOrEmpty(request.Version) ? this.Version : request.Version;
 
             // 添加协议级请求参数，为空的参数后面会自动过滤，这里不做处理。
             result.Add(METHOD, request.GetApiName());
-            result.Add(VERSION, apiVersion);
+            result.Add(VERSION, version);
             result.Add(APP_ID, appId);
             result.Add(FORMAT, format);
             result.Add(TIMESTAMP, DateTime.Now);
@@ -271,21 +271,9 @@ namespace Tom.Api.Request
             if (isBizContentEmpty && request.GetBizModel() != null)
             {
                 IObject bizModel = request.GetBizModel();
-                string content = Serialize(bizModel);
+                string content = Newtonsoft.Json.JsonConvert.SerializeObject(bizModel);
                 result.Add(BIZ_CONTENT, content);
             }
-            return result;
-        }
-
-        /// <summary>
-        /// IObject序列化
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        private string Serialize(IObject obj)
-        {
-            //导出string格式的Json
-            string result = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
             return result;
         }
 

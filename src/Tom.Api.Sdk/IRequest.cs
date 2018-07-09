@@ -5,7 +5,7 @@ namespace Tom.Api.Request
 {
     public interface IRequest<T> where T: IResponse
     {
-        string BizContent { get; set; }
+        string Biz_Content { get; set; }
         bool Debug { get; set; }
         string Session { get; set; }
 
@@ -17,15 +17,10 @@ namespace Tom.Api.Request
         string GetApiName();
 
         /// <summary>
-        /// 设置接口版本
-        /// </summary>
-        void SetApiVersion(string apiVersion);
-
-        /// <summary>
-        /// 返回接口版本
+        /// 接口版本
         /// </summary>
         /// <returns>接口版本</returns>
-        string GetApiVersion();
+        string Version { get; set; }
 
         /// <summary>
         /// 获取所有的Key-Value形式的文本请求参数字典。其中：

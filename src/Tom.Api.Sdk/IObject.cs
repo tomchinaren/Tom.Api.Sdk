@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Tom.Api
 {
@@ -6,7 +7,7 @@ namespace Tom.Api
     /// 基础对象。
     /// </summary>
     [Serializable]
-    public abstract class IObject
+    public abstract class IObject : Dictionary<string, string>
     {
     }
 }
