@@ -32,7 +32,8 @@ namespace Tom.Api.Util
         public string DoPost(string url, IDictionary<string, string> parameters, string charset, out string requestBody)
         {
             HttpWebRequest req = GetWebRequest(url, "POST");
-            req.ContentType = "application/x-www-form-urlencoded;charset=" + charset;
+            //req.ContentType = "application/x-www-form-urlencoded;charset=" + charset;
+            req.ContentType = "application/json;charset=" + charset;
 
             //string paramString = BuildQuery(parameters, charset);
             string paramString = BuildJsonQuery(parameters, charset);
@@ -229,8 +230,8 @@ namespace Tom.Api.Util
         public static string BuildJsonQuery(IDictionary<string, string> parameters, string charset)
         {
             var value = Newtonsoft.Json.JsonConvert.SerializeObject(parameters);
-            string encodedValue = HttpUtility.UrlEncode(value, Encoding.GetEncoding(charset));
-            return encodedValue;
+            //string encodedValue = HttpUtility.UrlEncode(value, Encoding.GetEncoding(charset));
+            return value;
         }
     }
 
